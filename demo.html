@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    
+    <head>
+        <base target="_blank">
+        <title>Co-Cupola</title>
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            google.load('jquery', '1')
+        </script>
+        <script type="text/javascript" src="https://raw.github.com/lizard-isana/orb.js/master/core.js"></script>
+        <script type="text/javascript" src="https://raw.github.com/lizard-isana/orb.js/master/satellite.js"></script>
+        <script type="text/javascript" src="javascripts/ui.js"></script>
+        <script type="text/javascript">
+            var geo = null;
+            var url = "http://www.crosshat.com/co-cupola/tle.cgi";
+            var tle_json = {
+                // Default Value
+                "first_line": "1 25544U 98067A   12114.37666865  .00021314  00000-0  27797-3 0  4289",
+                "second_line": "2 25544  51.6448  36.5965 0007783 308.3731 152.0510 15.58620202769472"
+            };
+
+            $(document).ready(function () {
+                $.getJSON(url, function (data) {
+                    if (data) {
+                        tle_json = data;
+                        console.log("first_line: " + tle_json["first_line"] + " second_line: " + tle_json["second_line"]);
+                    }
+                });
+            });
+
+            function getGeo() {
+                var satellite = new Orb.Satellite(tle_json);
+                var date = new Date();
+                var time = new Orb.Time(date);
+                geo = satellite.position.geographic(time);
+                return geo;
+            }
+
+            var ge;
+            var fullScreenState = false;
+            var noFullScreenIcon = null;
+            var fullScreenIcon = null;
+            google.load("earth", "1");
+
+            function init() {
+                // Create a button and input box.
+                var content = document.getElementById('content');
+                google.earth.createInstance('content', initCB, failureCB);
+                window.setInterval("update()", 100);
+                console.log("Longitude: " + getGeo()['longitude'] + " Latitude: " + getGeo()['latitude'] + " Altitude: " + getGeo()['altitude']);
+            }
+
+            function initCB(instance) {
+                ge = instance;
+                ge.getWindow().setVisibility(true);
+
+                // add a navigation control
+                ge.getNavigationControl().setVisibility(ge.VISIBILITY_HIDE);
+
+                // add some layers
+                //ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
+                //ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
+                ge.getLayerRoot().enableLayerById(ge.LAYER_TERRAIN, true);
+                ge.getOptions().setAtmosphereVisibility(true);
+
+                // add Overview Map
+                ge.getOptions().setOverviewMapVisibility(true);
+                ge.getOptions().setScaleLegendVisibility(true);
+                ge.getOptions().setFlyToSpeed(1.0);
+                ge.getOptions().setUnitsFeetMiles(false);
+                ge.getOptions().setTerrainExaggeration(2.5);
+
+                createFullScreenIcon();
+                createNormalScreenIcon();
+                toggleFullScreen();
+
+                google.earth.addEventListener(ge.getWindow(), "click", handleMouseClick);
+            }
+
+            function failureCB(errorCode) {
+                alert("Error: " + errorCode);
+            }
+
+            function handleMouseClick(event) {
+                var INSET_PIXELS_X = document.getElementById("content").offsetWidth - event.getClientX();
+                var INSET_PIXELS_Y = event.getClientY();
+                if (INSET_PIXELS_X < 32) {
+                    if (INSET_PIXELS_Y < 32) {
+                        toggleFullScreen();
+                    }
+                }
+            }
+
+            function toggleFullScreen() {
+                if (fullScreenState == true) {
+                    makeNormalScreen();
+                } else {
+                    makeFullScreen();
+                }
+                createOverlay();
+            }
+
+            function makeFullScreen() {
+                var samplecontainer = document.getElementById('fullscreencontainer');
+                var container = document.getElementById('content');
+                container.style.left = 0;
+                container.style.top = 0;
+                container.style.width = samplecontainer.offsetWidth + 'px';
+                container.style.height = samplecontainer.offsetHeight + 'px';
+                fullScreenState = true;
+                noFullScreenIcon.setVisibility(fullScreenState);
+                fullScreenIcon.setVisibility(!fullScreenState);
+            }
+
+            function makeNormalScreen() {
+                var samplecontainer = document.getElementById('sizecontainer');
+                var container = document.getElementById('content');
+                container.style.left = samplecontainer.style.left;
+                container.style.top = samplecontainer.style.top;
+                container.style.width = samplecontainer.offsetWidth + 'px';
+                container.style.height = samplecontainer.offsetHeight + 'px';
+                fullScreenState = false;
+                noFullScreenIcon.setVisibility(fullScreenState);
+                fullScreenIcon.setVisibility(!fullScreenState);
+            }
+
+            function createFullScreenIcon() {
+                // create an image for the screen overlay
+                var icon = ge.createIcon('');
+                icon.setHref('http://earth-api-samples.googlecode.com/svn/trunk/external/dinther_fullscreen_tofull.png');
+                // create the screen overlay
+                fullScreenIcon = ge.createScreenOverlay('');
+                fullScreenIcon.setDrawOrder(60);
+                fullScreenIcon.setIcon(icon);
+                // anchor point in top left of icon.
+                fullScreenIcon.getScreenXY().setXUnits(ge.UNITS_FRACTION);
+                fullScreenIcon.getScreenXY().setYUnits(ge.UNITS_FRACTION);
+                fullScreenIcon.getScreenXY().setX(1);
+                fullScreenIcon.getScreenXY().setY(1);
+                // place icon in top left of screen.
+                fullScreenIcon.getOverlayXY().setXUnits(ge.UNITS_INSET_PIXELS);
+                fullScreenIcon.getOverlayXY().setYUnits(ge.UNITS_INSET_PIXELS);
+                fullScreenIcon.getOverlayXY().setX(2);
+                fullScreenIcon.getOverlayXY().setY(4);
+                // Set icon size.
+                fullScreenIcon.getSize().setXUnits(ge.UNITS_PIXELS);
+                fullScreenIcon.getSize().setYUnits(ge.UNITS_PIXELS);
+                fullScreenIcon.getSize().setY(32);
+                fullScreenIcon.getSize().setX(32);
+                // add the screen overlay to Earth
+                ge.getFeatures().appendChild(fullScreenIcon);
+            }
+
+            function createNormalScreenIcon() {
+                // create an image for the screen overlay
+                var icon = ge.createIcon('');
+                icon.setHref('http://earth-api-samples.googlecode.com/svn/trunk/external/dinther_fullscreen_tonormal.png');
+                // create the screen overlay
+                noFullScreenIcon = ge.createScreenOverlay('');
+                noFullScreenIcon.setDrawOrder(62);
+                noFullScreenIcon.setIcon(icon);
+                // anchor point in top left of icon.
+                noFullScreenIcon.getScreenXY().setXUnits(ge.UNITS_FRACTION);
+                noFullScreenIcon.getScreenXY().setYUnits(ge.UNITS_FRACTION);
+                noFullScreenIcon.getScreenXY().setX(1);
+                noFullScreenIcon.getScreenXY().setY(1);
+                // place icon in top right of screen.
+                noFullScreenIcon.getOverlayXY().setXUnits(ge.UNITS_INSET_PIXELS);
+                noFullScreenIcon.getOverlayXY().setYUnits(ge.UNITS_INSET_PIXELS);
+                noFullScreenIcon.getOverlayXY().setX(2);
+                noFullScreenIcon.getOverlayXY().setY(4);
+                // Set icon size.
+                noFullScreenIcon.getSize().setXUnits(ge.UNITS_PIXELS);
+                noFullScreenIcon.getSize().setYUnits(ge.UNITS_PIXELS);
+                noFullScreenIcon.getSize().setY(32);
+                noFullScreenIcon.getSize().setX(32);
+                noFullScreenIcon.setVisibility(false);
+                // add the screen overlay to Earth
+                ge.getFeatures().appendChild(noFullScreenIcon);
+            }
+
+            function handleFullScreen() {
+                makeFullScreen();
+                createOverlay();
+            }
+
+            function update() {
+                var lookAt = ge.getView().copyAsLookAt(ge.ALTITUDE_RELATIVE_TO_GROUND);
+                var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+
+                var onViewChangeEnd = function () {};
+
+                camera.setLatitude(getGeo()['latitude']);
+                camera.setLongitude(getGeo()['longitude']);
+                camera.setAltitude(getGeo()['altitude'] * 900);
+                ge.getView().setAbstractView(lookAt);
+                ge.getView().setAbstractView(camera);
+            }
+
+            google.setOnLoadCallback(init);
+        </script>
+        <!-- Google Analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-31099202-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </head>
+    
+    <body onresize="handleFullScreen();" bgcolor="#F9F8F9" link="#54006C" vlink="#270037" alink="#00FFFF">
+        <div id="fullscreencontainer" style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"></div>
+        <div id="sizecontainer" style="position: absolute; left: 10px;width: 99%; height: 800px;"></div>
+        <div id="content" style="position: absolute; left: 10px; width: 99%; height: 800px;"></div>
+    </body>
+
+</html>

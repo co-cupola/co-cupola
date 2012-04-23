@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <title>Co-Cupola</title>
+        <link rel="stylesheet" href="stylesheets/styles.css">
+        <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <!--[if lt IE 9]>
+            <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-31099202-1']);
+            _gaq.push(['_trackPageview']);
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </head>
+    
+    <body>
+        <div id="fb-root"></div>
+        <script>
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=226053730817069";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <div class="wrapper">
+            <header>
+                <h1>Co-Cupola</h1>
+                <h2>コ・キューポラ</h2>
+                <p>
+                  「コ・キューポラ」は、国際宇宙ステーション（ISS）の「キューポラ」から見える景色を、どこでも気軽に再現するために開発されました。
+                </p>
+                <p>
+                  <small>
+                    Co-Cupola has developed to share ISS cupola's view for all people, especially children.<br/>
+                    We can share the view as astronaut at everywhere, only using common PC, common projector and web browser.
+                    Co-Cupola display real-time and real-scale view from ISS cupola.
+                    It is strongly recomended that projecting onto ceilings.<br />
+                    Enjoy zero gravity feeling!
+                  </small>
+                </p>
+                <p>
+                    <img src="./imgs/about.gif" title="Cupola">
+                </p>
+                <ul>
+                    <li>
+                        <a href="./demo.html">Co-Cupola<strong>Start</strong></a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/co-cupola/co-cupola/zipball/master">Co-Cupola <strong>Download</strong></a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/co-cupola/co-cupola">Fork On <strong>GitHub</strong></a>
+                    </li>
+                </ul>
+            </header>
+            <section>
+                <div class="fb-like" data-href="http://www.facebook.com/cocupola" data-send="false"
+                data-layout="button_count" data-width="450" data-show-faces="false"></div>
+                <h3>使い方</h3>
+                <p>
+                    <div style="width:510px" id="__ss_12636679">
+                        <object id="__sse12636679" width="510" height="426">
+                            <param name="movie" value="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=co-cupola-120421225346-phpapp02&stripped_title=co-cupola&userName=hrsx"
+                            />
+                            <param name="allowFullScreen" value="true" />
+                            <param name="allowScriptAccess" value="always" />
+                            <param name="wmode" value="transparent" />
+                            <embed name="__sse12636679" src="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=co-cupola-120421225346-phpapp02&stripped_title=co-cupola&userName=hrsx"
+                            type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"
+                            wmode="transparent" width="510" height="426"></embed>
+                        </object>
+                    </div>
+                </p>
+                <br/>
+                <h3>開発者の方へ</h3>
+                <p>このプログラムは、ISSの最新の軌道要素を元に計算した現在のISSの飛行位置から、キューポラ（ISSの観望窓）を通して見える地球の姿を、リアルタイムに表示しています。JavaScriptで書かれた、Webブラウザだけで動かすことができるプログラムです。</p>
+                <p>Co-Cupolaのすべては
+                    <a target="_blank" href="http://ossipedia.ipa.go.jp/legalinfo/gpl-3.0J.html">GNU General Public License v3</a>に準じて、
+                    <a target="_blank" href="https://github.com/co-cupola/co-cupola">GitHub</a>で公開しています。</p>
+                <p>Co-Cupolaでは、以下の情報ソース、ライブラリ、APIを利用させて頂きました。
+                    <br/>ISSの最新の軌道要素：
+                    <a target="_blank" href="http://spaceflight.nasa.gov/realdata/sightings/SSapplications/Post/JavaSSOP/orbit/ISS/SVPOST.html">NASA HumanSpaceFlight Realtime Data</a>
+                    <br/>軌道要素から現在地の計算：
+                    <a target="_blank" href="https://github.com/lizard-isana/orb.js">Orb.js</a>
+                    <br/>地球画像の表示：
+                    <a target="_blank" href="https://developers.google.com/maps/documentation/javascript/v2/">Google Maps Javascript API version 2.0</a>
+                </p>
+                <br/>
+                <br/>
+                <h4>開発者一覧</h4>
+                <p>International Space Apps Challenge Tokyo 2012/4/21-22</p>
+                <p>
+                    <a href="https://www.facebook.com/p0lyg0n">Hiroshi Inukai</a>/ Direction</p>
+                <p>
+                    <a href="https://www.facebook.com/symada">Takuya Shimada</a>/ Program</p>
+                <p>
+                    <a href="https://www.facebook.com/jl7kii">Shin'ichiro Suzuki</a>/ Program</p>
+                <p>
+                    <a href="https://www.facebook.com/shirado">Masafumi Shirado</a>/ Program</p>
+                <p>
+                    <a href="https://www.facebook.com/djsayura">Sayuri Nagayoshi</a>/ Illustration</p>
+                <p>
+                    <a href="https://www.facebook.com/yoshihiro.mita">Yoshihiro Mita</a>/ Hardware Design</p>
+                <p>
+                    <a href="https://www.facebook.com/profile.php?id=100002165612211">Sohei Sato</a>/ Hardware Design</p>
+                <p>
+                    <a href="https://www.facebook.com/hiroshi.obayashi">Hiroshi Obayashi</a>/ Web Site / Slide Direction</p>
+                <br/>
+                <h3>問い合わせ</h3>
+                <p>cocupola[at]gmail.com</p>
+            </section>
+            <footer>
+                <small>
+                    <strong>推奨環境</strong>
+                    <br/>OS: MacOS 10.5以上またはWindows XP以上
+                    <br/>ブラウザ:
+                    <a target="_blank" href="http://www.google.co.jp/intl/ja/earth/explore/products/plugin.html">Google Earth Plugin</a>がインストールされた
+                    <a target="_blank" href="http://www.google.co.jp/chrome/intl/ja/landing.html">Google Chrome</a>、
+                    <a target="_blank" href="http://mozilla.jp/firefox/">Mozilla Firefox</a>
+                    </li>
+                    </ul>
+                </small>
+            </footer>
+        </div>
+        <script src="javascripts/scale.fix.js"></script>
+    </body>
+</html>
