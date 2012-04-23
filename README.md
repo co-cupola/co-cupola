@@ -1,6 +1,6 @@
-# Co-Cupola
+## Co-Cupola
 
-## 2012 International Space Apps Challenge at Tokyo
+### 2012 International Space Apps Challenge at Tokyo
 
 ![Key-Visual](http://st01.zorg.com/pict/201204/24/10133520317600016460_na24jsy8vw.jpg)
 
